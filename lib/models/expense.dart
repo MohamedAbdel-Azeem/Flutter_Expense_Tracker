@@ -14,14 +14,14 @@ class Expense {
     required this.amount,
     required this.date ,
     required this.category,
-    this.description
+    required this.description
   }) : id = uuid.v4();
 
 
   final String id;
   final String title;
   final double amount;
-  final String? description;
+  final String description;
   final DateTime date;
   final Category category;
 

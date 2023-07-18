@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import '../models/expense.dart';
 
-
 class NewExpense extends StatefulWidget {
   final void Function(Expense expense) onAddExpense;
-  const NewExpense({super.key , required this.onAddExpense});
+
+  const NewExpense({super.key, required this.onAddExpense});
 
   @override
   State<NewExpense> createState() {
@@ -14,10 +14,10 @@ class NewExpense extends StatefulWidget {
 
 class _NewExpenseState extends State<NewExpense> {
   final _titleController = TextEditingController();
+  final _descriptionController = TextEditingController();
   final _amountController = TextEditingController();
   DateTime? _selectedDate;
   Category _selectedCategory = Category.leisure;
-
 
   void _presentDatePicker() async {
     final now = DateTime.now();
@@ -33,20 +33,32 @@ class _NewExpenseState extends State<NewExpense> {
     });
   }
 
-  void _submitExpenseData(){
+  void _submitExpenseData() {
     final enteredAmount = double.tryParse(_amountController.text);
     final amountInvalid = enteredAmount == null || enteredAmount <= 0;
-    if (_titleController.text.trim().isEmpty || amountInvalid || _selectedDate == null){
-        showDialog(context: context, builder: (ctx) => AlertDialog(
-          title: const Text("Invalid input"),
-          content: const Text("Please make sure a valid title,amount,date and category was entered!"),
-          actions: [
-            TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("Okay!"))
-          ],
-        ));
-        return;
+    if (_titleController.text.trim().isEmpty ||
+        amountInvalid ||
+        _selectedDate == null) {
+      showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+                title: const Text("Invalid input"),
+                content: const Text(
+                    "Please make sure a valid title,amount,date and category was entered!"),
+                actions: [
+                  TextButton(
+                      onPressed: () => Navigator.pop(ctx),
+                      child: const Text("Okay!"))
+                ],
+              ));
+      return;
     }
-    final theNewExpense = Expense(title: _titleController.text, amount: enteredAmount, date: _selectedDate!, category: _selectedCategory);
+    final theNewExpense = Expense(
+        title: _titleController.text,
+        amount: enteredAmount,
+        date: _selectedDate!,
+        category: _selectedCategory,
+        description: _descriptionController.text);
     widget.onAddExpense(theNewExpense);
     Navigator.pop(context);
   }
@@ -56,13 +68,14 @@ class _NewExpenseState extends State<NewExpense> {
     //cleaning up
     _titleController.dispose();
     _amountController.dispose();
+    _descriptionController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 48 , 16 , 16),
+      padding: const EdgeInsets.fromLTRB(16, 48, 16, 16),
       child: Column(
         children: [
           TextField(
@@ -99,6 +112,15 @@ class _NewExpenseState extends State<NewExpense> {
           ),
           const SizedBox(
             height: 16,
+          ),
+          TextFormField(
+            controller: _descriptionController,
+            decoration: const InputDecoration(
+              label: Text("Description (Optional)"),
+            ),
+          ),
+          const SizedBox(
+            height: 20,
           ),
           Row(
             children: [

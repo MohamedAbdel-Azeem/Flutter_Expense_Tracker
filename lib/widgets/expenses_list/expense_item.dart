@@ -3,13 +3,39 @@ import 'package:flutter/material.dart';
 
 import '../../models/expense.dart';
 
-class ExpenseItem extends StatelessWidget {
+class ExpenseItem extends StatefulWidget {
   const ExpenseItem(this.expense, {super.key});
 
   final Expense expense;
 
   @override
+  State<ExpenseItem> createState() {
+    return _ExpenseItemState();
+  }
+}
+
+class _ExpenseItemState extends State<ExpenseItem> {
+  bool isExpanded = false;
+
+  Icon getExtendIcon() {
+    if (!isExpanded) {
+      return const Icon(Icons.keyboard_arrow_down_outlined);
+    }
+      return const Icon(Icons.keyboard_arrow_up_outlined);
+  }
+
+  Text getDescriptionText(String str){
+    if (str == ""){
+       str = "There's no description";
+       return Text(str , style: const TextStyle(fontSize: 15 , color: Colors.white70),);
+    }
+    return Text(str , style: const TextStyle(fontSize: 17),);
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final Expense expense = widget.expense;
+
     return Card(
         child: Padding(
       padding: const EdgeInsets.symmetric(
@@ -17,10 +43,22 @@ class ExpenseItem extends StatelessWidget {
         vertical: 16,
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        //crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(expense.title,
-              style: const TextStyle(fontSize: 19),),
+          Row(
+            children: [
+              Text(
+                expense.title,
+                style: const TextStyle(fontSize: 19),
+              ),
+              const Spacer(),
+              IconButton(onPressed: () {
+                setState(() {
+                  isExpanded = !isExpanded;
+                });
+              }, icon: getExtendIcon()),
+            ],
+          ),
           const SizedBox(
             height: 4,
           ), // we could have used margain
@@ -39,6 +77,8 @@ class ExpenseItem extends StatelessWidget {
               ),
             ],
           ),
+          isExpanded? const SizedBox(height: 20)  : const SizedBox(height: 0,),
+          isExpanded?  getDescriptionText(expense.description)  : const SizedBox(height: 0,),
         ],
       ),
     ));
