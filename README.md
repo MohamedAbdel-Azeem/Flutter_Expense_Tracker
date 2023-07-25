@@ -11,5 +11,7 @@ Things learned:
 - Practicing the Dart Language.
 - Using Various widgets such as the Dismissible , IconButton and Card widgets.
 - Learning about themes and how to make the app adapt to Dark / Light mode and changing theme based on it.
+- Building responsive user Interfaces by using LayoutBuilder to render parts of UI conditionally.
+- Showing different Widgets based on Platform Used (IOS/Android).
 
 Your Feedback will be more than welcome.
